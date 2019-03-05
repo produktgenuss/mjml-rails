@@ -41,8 +41,12 @@ module Mjml
       @_template_handler ||= ActionView::Template.registered_template_handler(Mjml.template_language)
     end
 
-    def call(template)
-      compiled_source = template_handler.call(template)
+    def call(template, source = nil)
+      compiled_source = if source
+        template_handler.call(template, source)
+      else
+        template_handler.call(template)
+      end
 
       # Per MJML v4 syntax documentation[0] valid/render'able document MUST start with <mjml> root tag
       # If we get here and template source doesn't start with one it means
